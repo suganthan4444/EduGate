@@ -1,4 +1,4 @@
-/*react-project/src/EducatorSignIn.css*/
+/*react-project/src/LearnerSignUp.css*/
 body {
     background-color: #f0f0f0;
     margin: 0;
@@ -6,15 +6,13 @@ body {
     height: 100vh;
     font-family: Arial, sans-serif;
 }
-
-.container1 {
+.container4 {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-   
-    width: 400px;
-    height: 300px;
+    width: 400px; 
+    height: 625px;
     position: absolute;
     top: 60%;
     left: 50%;
@@ -22,25 +20,24 @@ body {
 }
 
 
-.container1 form {
-    width: 100%; 
+.container4 form {
+    width: 100%;
 }
 
 
-.container1 input[type="text"],
+.container4 input[type="text"],
 input[type="password"],
-input[type="date"],
-input[type="email"],
-input[type="submit"] {
+input[type="date"] {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
+    color: #000;
 }
 
 
-.container1 input[type="submit"] {
+.container4 input[type="submit"] {
     width: 50%; 
     padding: 10px;
     background-color: #007bff;
@@ -48,10 +45,14 @@ input[type="submit"] {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin: 10px auto; 
-    display: block;
+    margin: 10px auto;
+    display: block; 
 }
-.container1 label {
+.container4 input[type="date"]{
+    color: #000;
+}
+
+.container4 label {
     display: block;
     margin-top: 10px;
     margin-bottom: 5px;
@@ -59,19 +60,30 @@ input[type="submit"] {
     color: #000;
 }
 
-.container1 h2 {
+
+.container4 h2 {
     color: #000;
     text-align: center;
 }
 
-.container1 a {
+.container4 a {
     color: #007bff;
     text-decoration: none;
-    margin-top: 10px;
-    display: block;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    margin: 10px auto;
+    display: block; 
     text-align: center;
 }
 
-.container1 a:hover {
+.container4 a:hover {
     text-decoration: underline;
+}
+.container4 select, option{
+    color: #000;
+}
+
+.container4 p{
+    color: green;
 }

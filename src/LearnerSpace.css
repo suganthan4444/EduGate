@@ -1,0 +1,44 @@
+/* LearnerSpace.css */
+
+.learner-space {
+    display: flex;
+  }
+  
+  .sidebar1 {
+    height: 100%;
+    width: 200px;
+    background-color: aqua;
+    padding: 10px;
+  }
+  
+  .sidebar1 ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar1 ul li {
+    border:blue 2px solid;
+    margin: 10px 0;
+    text-decoration: none;
+  }
+  
+  .sidebar1 ul li a,
+  .sidebar1 ul li button {
+    text-decoration: none;
+    color: #333;
+    padding: 8px 12px;
+    display: block;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .sidebar1 ul li a:hover,
+  .sidebar ul li button:hover {
+    background-color: #ccc;
+  }
+  
+  .content {
+    flex: 1;
+    padding: 20px;
+  }
+  

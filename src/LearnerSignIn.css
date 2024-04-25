@@ -1,4 +1,4 @@
-/*react-project/src/EducatorSignIn.css*/
+/*react-project/src/LearnerSignIn.css*/
 body {
     background-color: #f0f0f0;
     margin: 0;
@@ -6,8 +6,16 @@ body {
     height: 100vh;
     font-family: Arial, sans-serif;
 }
+.learner-component-background{
+    background-image: url('e-learning.jpg'); /* Assuming background.jpg is in the public folder */
+    background-size: cover;
+    background-position: center;
+    color: blue;
+    height: 100vh ;
 
-.container1 {
+}
+
+.container3 {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -22,12 +30,12 @@ body {
 }
 
 
-.container1 form {
+.container3 form {
     width: 100%; 
 }
 
 
-.container1 input[type="text"],
+.container3 input[type="text"],
 input[type="password"],
 input[type="date"],
 input[type="email"],
@@ -40,7 +48,7 @@ input[type="submit"] {
 }
 
 
-.container1 input[type="submit"] {
+.container3 input[type="submit"] {
     width: 50%; 
     padding: 10px;
     background-color: #007bff;
@@ -51,7 +59,7 @@ input[type="submit"] {
     margin: 10px auto; 
     display: block;
 }
-.container1 label {
+.container3 label {
     display: block;
     margin-top: 10px;
     margin-bottom: 5px;
@@ -59,12 +67,12 @@ input[type="submit"] {
     color: #000;
 }
 
-.container1 h2 {
+.container3 h2 {
     color: #000;
     text-align: center;
 }
 
-.container1 a {
+.container3 a {
     color: #007bff;
     text-decoration: none;
     margin-top: 10px;
@@ -72,6 +80,6 @@ input[type="submit"] {
     text-align: center;
 }
 
-.container1 a:hover {
+.container3 a:hover {
     text-decoration: underline;
 }

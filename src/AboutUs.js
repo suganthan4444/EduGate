@@ -1,4 +1,4 @@
-//AboutUs.js
+//react-project/src/AboutUs.js
 import React from 'react';
 
 function AboutUs() {

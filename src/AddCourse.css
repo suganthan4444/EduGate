@@ -1,0 +1,35 @@
+.add-course-container {
+    margin-top: 1cm;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 9999; /* Ensure it appears above other content */
+    max-width: 80%; /* Adjust as needed */
+    max-height: 80vh; /* Set maximum height and enable vertical scrolling */
+    overflow-y: auto; /* Enable vertical scrollbar */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.add-course {
+    max-width: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+h2{
+    text-align: center;
+}
+.submit-button{
+    width:70px;
+    align-self: center;
+    margin-top: 20px;
+}

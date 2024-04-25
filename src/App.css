@@ -1,15 +1,15 @@
+/*react-project/src/App.css*/
 @import url('https://fonts.googleapis.com/css2?family=Poppins&family=Ubuntu:wght@300;700&display=swap');
     
     *{
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        color:red;
         font-family: 'Ubuntu', sans-serif;
     }
     
     .navbar {
-        background-color: rgb(22, 7, 36);
+        background-color: rgb(4, 4, 23);
         display: flex;
         justify-content: space-around;
         align-items: center;
@@ -23,22 +23,6 @@
         cursor: pointer;
     }
     
-    .checkBtn {
-        display: none;
-    }
-    
-    #check {
-        display: none;
-    }
-    
-    .checkBtn {
-        cursor: pointer;
-        font-size: 30px;
-        float: right;
-        color: #ed1e79;
-        line-height: 80px;
-    }
-    
     .right ul {
         display: flex;
         list-style: none;
@@ -46,7 +30,7 @@
     
     .right ul li a {
         padding: 10px 20px;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         color: white;
         cursor: pointer;
         text-decoration: none;
@@ -86,5 +70,87 @@ h1 {
 .right ul li a.active {
     background-color: green; 
     color: white; 
+    border-radius: 7px;
 }
 
+.left-menu {
+    background-color:rgb(4, 4, 23) ;
+    margin-top: 21.1cm;
+    margin-left:-21cm;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px; /* Adjust as needed */
+    width:4.5cm;
+    height:100vh;
+  }
+  
+  .left-menu li {
+    margin-bottom: 10px; /* Adjust as needed */
+    margin-left: 1cm;
+  }
+  .left-menu ul, li{
+    list-style: none;
+  }
+  
+  .left-menu li a {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 1s; /* Adjust as needed */
+    text-decoration: none;
+  }
+  
+  .left-menu li a:hover {
+    background-color: #fff;
+    border-radius: 7px;
+    color: rgb(22, 7, 36);
+  }
+  .left-menu li a.active {
+    background-color: green; 
+    color: white; 
+    border-radius: 7px;
+}
+.menu-icon {
+  position: relative;
+  color: #ffffff;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.menu-items {
+  position: absolute;
+  top: 13%;
+  left: 0;
+  width: 10%;
+  background-color: rgb(22, 7, 36);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  transition: all 1s;
+  z-index: 999; /* Ensure the menu is above other content */
+}
+
+.menu-items li a{
+  padding: 10px 20px;
+  list-style: none;
+  font-size: 1.3rem;
+}
+
+.menu-items a {
+  color: white;
+  text-decoration: none;
+}
+
+.menu-items a:hover {
+  background-color: #fff;
+  border-radius: 7px;
+  color: rgb(22, 7, 36);
+}
+
+.menu-items li a.active{
+  background-color: green; 
+    color: white; 
+    border-radius: 7px;
+}

@@ -1,4 +1,4 @@
-// Home.js
+// react-project/src/Home.js
 import React from 'react';
 
 function Home() {
