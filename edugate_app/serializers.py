@@ -11,4 +11,4 @@ class LearnerSerializer(serializers.ModelSerializer):
 class EducatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Educator
-        fields = '__all__'
+        exclude = ['educator_id']

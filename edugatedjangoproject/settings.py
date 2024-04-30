@@ -26,7 +26,11 @@ SECRET_KEY = 'tya3ipop^pkq)8te3u17!lf!0gs*&(^u0u16)gw%=m+m!djya$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost:8000', 'localhost:3000','127.0.0.1']
+X_FRAME_OPTIONS = 'ALLOW-FROM http://localhost:3000 http://127.0.0.1:8000'
+
+
+
+ALLOWED_HOSTS = ['localhost', 'localhost:3000','127.0.0.1']
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [ "http://localhost:3000"] 
@@ -60,6 +64,7 @@ INSTALLED_APPS = [
     'edugate_app',
     'corsheaders',
     'rest_framework',
+    'rest_framework_swagger',
 ]
 
 
@@ -203,3 +208,17 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_PATH = '/'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 SESSION_COOKIE_SAMESITE = 'None'
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.2/howto/static-files/
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
