@@ -16,7 +16,6 @@ function LearnerSignIn() {
                 setCsrfToken(response.data.csrfToken);
             } catch (error) {
                 console.error('Error fetching CSRF token:', error);
-                // Handle error if unable to fetch CSRF token
             }
         }
 

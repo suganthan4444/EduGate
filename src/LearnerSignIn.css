@@ -7,7 +7,7 @@ body {
     font-family: Arial, sans-serif;
 }
 .learner-component-background{
-    background-image: url('e-learning.jpg'); /* Assuming background.jpg is in the public folder */
+    background-image: url('e-learning.jpg'); 
     background-size: cover;
     background-position: center;
     color: blue;

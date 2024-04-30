@@ -21,6 +21,8 @@
         margin-top: .7cm;
         margin-left: -3cm;
         cursor: pointer;
+        height: 100px;
+        width:300px;
     }
     
     .right ul {
@@ -79,13 +81,13 @@ h1 {
     margin-left:-21cm;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px; /* Adjust as needed */
+    padding-top: 20px;
     width:4.5cm;
     height:100vh;
   }
   
   .left-menu li {
-    margin-bottom: 10px; /* Adjust as needed */
+    margin-bottom: 10px;
     margin-left: 1cm;
   }
   .left-menu ul, li{
@@ -98,7 +100,7 @@ h1 {
     color: white;
     cursor: pointer;
     text-decoration: none;
-    transition: all 1s; /* Adjust as needed */
+    transition: all 1s;
     text-decoration: none;
   }
   
@@ -129,7 +131,7 @@ h1 {
   display: flex;
   flex-direction: column;
   transition: all 1s;
-  z-index: 999; /* Ensure the menu is above other content */
+  z-index: 999; 
 }
 
 .menu-items li a{
@@ -153,4 +155,7 @@ h1 {
   background-color: green; 
     color: white; 
     border-radius: 7px;
+}
+.edugate-logo{
+  size: 50px;
 }

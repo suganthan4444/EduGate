@@ -1,0 +1,22 @@
+
+ .image{
+    height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+ }
+ .contact-us{
+    background-color: burlywood;
+ }
+ img{
+    width: 350px;
+    align-items: center;
+ }
+ .cont{
+   color: aliceblue;
+ }
+ .mail{
+font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+color:crimson;
+ }

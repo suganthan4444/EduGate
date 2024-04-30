@@ -5,7 +5,6 @@ const SessionDataComponent = () => {
     const [sessionData, setSessionData] = useState(null);
 
     useEffect(() => {
-        // Fetch session data when component mounts
         const getSessionData = async () => {
             const data = await fetchSessionData();
             setSessionData(data);
@@ -14,7 +13,6 @@ const SessionDataComponent = () => {
         getSessionData();
     }, []);
 
-    // Display the session data
     return (
         <div>
             <h3>Session Data</h3>

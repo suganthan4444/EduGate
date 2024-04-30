@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './LearnerCourses.css'; // Import any styles for this component
+import './LearnerCourses.css';
 import { useParams } from 'react-router-dom';
 
 function LearnerCourses() {
@@ -10,7 +10,6 @@ function LearnerCourses() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch course data based on the courseId from the URL parameters
     fetch(`/api/learner-courses/${courseId}`)
       .then(response => {
         if (!response.ok) {
@@ -29,14 +28,11 @@ function LearnerCourses() {
       });
   }, [courseId]);
 
-  // Function to handle course completion logic
   const handleCourseCompletion = () => {
-    // Check if all videos and exercises are completed
     const allVideosWatched = courseVideos.every(video => video.isWatched);
     const allExercisesCompleted = courseExercises.every(exercise => exercise.isCompleted);
 
     if (allVideosWatched && allExercisesCompleted) {
-      // Handle course completion logic here, e.g., awarding a completion certificate
       alert('Course completed! You have earned a completion certificate.');
     } else {
       alert('Please complete all videos and exercises to finish the course.');
@@ -46,7 +42,7 @@ function LearnerCourses() {
   return (
     <div className="course-details">
       {error ? (
-        <p className="error">{error}</p> // Display error message
+        <p className="error">{error}</p>
       ) : course ? (
         <>
           <h2>{course.Course_Name}</h2>
@@ -87,7 +83,7 @@ function LearnerCourses() {
           <button onClick={handleCourseCompletion}>Check Course Completion</button>
         </>
       ) : (
-        <p>Loading course data...</p> // Loading state
+        <p>Loading course data...</p>
       )}
     </div>
   );

@@ -17,7 +17,6 @@ function EducatorSignIn() {
                 setCsrfToken(response.data.csrfToken);
             } catch (error) {
                 console.error('Error fetching CSRF token:', error);
-                    // Handle error if unable to fetch CSRF token
             }
             }
     
@@ -35,6 +34,10 @@ function EducatorSignIn() {
             });
             if (response.data.success) {
                 const educatorId = response.data.educator_id;
+                const educatorName = response.data.educator_name;
+                sessionStorage.setItem('authenticated', 'true');
+                sessionStorage.setItem('educatorId', educatorId);
+                sessionStorage.setItem('educatorName', educatorName)
                 navigate(`/educator-space/${educatorId}`);
             } else {
                 alert(response.data.message);

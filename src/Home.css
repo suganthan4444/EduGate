@@ -1,0 +1,75 @@
+
+.one{
+     
+    color:skyblue;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    padding: 20px;
+  }
+  .content{
+  margin:10px;
+  padding:20px;  
+  font-size:large;
+  color:red;
+  border: 2px blue solid;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .two{
+    text-align: center;
+  }
+  .third{
+    margin:2px;
+    line-height: 200%;
+    font-size:20px;
+    font-style: bold;
+    color:brown;
+    
+  }
+  
+  
+   
+  /* CSS styles for the "Why Choose Us?" section */
+  
+   /* CSS styles for the "Why Choose Us?" section */
+  
+  .choose-us {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+  
+  .choose-us h2 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .choose-us-item {
+    margin-bottom: 30px;
+  }
+  
+  .choose-us-item h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .choose-us-item .hover-content {
+    display: none;
+  }
+  
+  .choose-us-item:hover .hover-content {
+    display: block;
+    transition: opacity 0.5s ease;
+  }
+  
+  .choose-us-item p {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .hover-content{
+    color: darkblue;
+  }
+  h2{
+    color:darkred;
+    background-color:burlywood;
+    width: auto;
+  }
+  

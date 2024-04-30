@@ -1,4 +1,4 @@
-// Import necessary libraries and modules
+
 import React, { useState, useEffect } from 'react';
 import './EducatorSignUp.css';
 import api from './api';
@@ -30,7 +30,7 @@ import { debounce } from 'lodash';
     const [passwordErrors, setPasswordErrors] = useState([]);
     const [csrfToken, setCsrfToken] = useState('');
 
-    const [usernameAvailable, setUsernameAvailable] = useState(null); // Initialize as null
+    const [usernameAvailable, setUsernameAvailable] = useState(null);
 
 useEffect(() => {
     async function fetchCsrfToken() {
@@ -39,18 +39,15 @@ useEffect(() => {
             setCsrfToken(response.data.csrfToken);
         } catch (error) {
             console.error('Error fetching CSRF token:', error);
-            // Handle error if unable to fetch CSRF token
         }
     }
 
     fetchCsrfToken();
 }, []);
 
-// Function to handle username availability check
 const debouncedCheckEducatorUsernameAvailability = debounce(async (username) => {
-    // Return early if the username is empty
     if (!username) {
-        setUsernameAvailable(null); // Reset availability state
+        setUsernameAvailable(null);
         setErrorFields((prevFields) => ({
             ...prevFields,
             username: 'Username cannot be empty.',
@@ -59,22 +56,19 @@ const debouncedCheckEducatorUsernameAvailability = debounce(async (username) => 
     }
 
     try {
-        // Make a POST request to check username availability
         const response = await api.post('/check-educator-username-availability/', {
             username, headers: {
                 'X-CSRFToken': csrfToken,
             }
         });
 
-        // Handle the response data
         const isUnique = response.data.username.is_unique;
         setUsernameAvailable(isUnique);
 
-        // Update error fields and error message based on availability
         if (isUnique) {
             setErrorFields((prevFields) => ({
                 ...prevFields,
-                username: '', // Clear any previous error
+                username: '',
             }));
         } else {
             setErrorFields((prevFields) => ({
@@ -83,7 +77,7 @@ const debouncedCheckEducatorUsernameAvailability = debounce(async (username) => 
             }));
         }
     } catch (error) {
-        // Handle any error during the request
+
         console.error('Error checking username:', error);
         setErrorFields((prevFields) => ({
             ...prevFields,
@@ -140,54 +134,48 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
         return errorMessages;
     }
 
-    // Handle input change events
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevFormData) => ({
             ...prevFormData,
             [name]: value,
         }));
-    
-        // Handle real-time username availability check
+
         if (name === 'username') {
             debouncedCheckEducatorUsernameAvailability(value);
         }
-    
-        // Trigger password validation when password changes
+
         if (name === 'password') {
             const errors = validatePassword(value);
             setPasswordErrors(errors);
         }
     };
 
-    // Handle form submission
+
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        // Check for password errors
+
         if (passwordErrors.length > 0) {
             alert('Please fix password errors before submitting.');
             return;
         }
     
-        // Extract email and mobile_no from formData
+
         const { email, mobile_no } = formData;
     
-        // Check learner unique fields
+
         await debouncedCheckEducatorUniqueFields(email, mobile_no);
-    
-        // If there are any errors in email or mobile_no, display the error messages
-        // below the corresponding fields and stop form submission
+
         if (errorFields.email) {
-            alert(errorFields.email); // Alert the error message
+            alert(errorFields.email);
             return;
         }
         if (errorFields.mobile_no) {
-            alert(errorFields.mobile_no); // Alert the error message
+            alert(errorFields.mobile_no); 
             return;
         }
     
-        // If all unique field checks pass, proceed to send OTP
         setIsLoading(true);
         try {
             const response = await api.post('/educator-send-otp/', { email },{headers: {
@@ -204,8 +192,6 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
     };
     
     
-
-        // Handle OTP verification
     const handleOTPVerification = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -221,7 +207,6 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
             if (response.data.success) {
                 setIsOtpVerified(true);
                 alert('OTP verified successfully!');
-                // Proceed to learner signup
                 await handleEducatorSignup();
             } else {
                 alert('Incorrect OTP. Please try again.');
@@ -244,7 +229,7 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
             });
             alert(response.data.message);
             setOtpSent(true);
-            setOtp(''); // Clear OTP input
+            setOtp(''); 
         } catch (error) {
             console.error('Error sending OTP:', error);
             alert('Failed to send OTP. Please try again.');
@@ -253,24 +238,19 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
         }
     };
 
-    // Handle learner sign-up
     const handleEducatorSignup = async () => {
         try {
-            // Prepare data to send
             const dataToSend = {
                 ...formData,
                 otp: otp,
             };
 
-            // Make a POST request to the learner signup endpoint
             const response = await api.post('/educator-signup/', dataToSend, {headers: {
                 'X-CSRFToken': csrfToken,
         }});
 
-            // Handle the response
             if (response.status === 201) {
                 alert('Educator signed up successfully!');
-                // Perform any other navigation or state updates as needed
             } else {
                 alert(`Error: ${response.data.message}`);
             }
@@ -427,6 +407,8 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
             ) : (
                 <div>
                     <p>OTP verified successfully! Proceed with the next steps.</p>
+                    <a href="/educator-signin">Sign In Now</a>
+
                 </div>
             )}
             </div>

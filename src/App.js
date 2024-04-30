@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink, Navigate } from 'react-router-dom';
 import './App.css';
 import logo from './Color.png';
 import { Helmet } from 'react-helmet';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faEnvelope, faChalkboardUser, faBookOpenReader, faLightbulb, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faEnvelope, faChalkboardUser, faBookOpenReader, faLightbulb } from '@fortawesome/free-solid-svg-icons';
 
 import AboutUs from './AboutUs';
 import LearnerSignIn from './LearnerSignIn';
@@ -24,47 +24,27 @@ import EducatorSpace from './EducatorSpace';
 import EducatorProfile from './EducatorProfile';
 import EducatorCourses from './EducatorCourses';
 import AddCourse from './AddCourse';
-
-// Importing MyComponen
+import AdminHome from './AdminHome';
+import AdminLogin from './AdminLogin';
+import AdminCourses from './AdminCourses';
+import AdminEducators from './AdminEducators';
+import AdminLearners from './AdminLearners';
+import CourseInLook from './CourseInLook';
 
 
 function App() {
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  
   return (
     <Router>
       <Helmet>
         <title>EduGate</title>
         <meta name="description" content="This is my React app" />
-        <link rel="icon" href="/Color.png" type="image/x-icon" />
+        <link rel="icon" href="/Color.png" type="image/x-icon" className="edugate-logo"/>
       </Helmet>
       
       <nav className="navbar">
-      <div className="menu-icon" onClick={toggleMenu}>
-        <FontAwesomeIcon icon={faBars} style={{ color: "#ffffff" }} />
-      </div>
-
-      {/* Menu Items */}
-      {isMenuOpen && (
-        <div className="menu-items">
-          <ul>
-            <li>
-              <NavLink to="/courses">Courses</NavLink>
-            </li>
-            <li>
-              <NavLink to="/educators">Educators</NavLink>
-            </li>
-            <li>
-              <NavLink to="/learners">Learners</NavLink>
-            </li>
-            {/* Add more menu items as needed */}
-          </ul>
-        </div>
-      )}
 
         <div className="left">
           <NavLink to="/home">
@@ -122,8 +102,13 @@ function App() {
         <Route path="/educator-profile/*" element={<EducatorProfile />} />
         <Route path="/educator-courses/*" element={<EducatorCourses />} />
         <Route path="/add-course" element={<AddCourse />} />
+        <Route path="/admin-courses" element={<AdminCourses />} />
+        <Route path="/admin-home" element={<AdminHome />} />
+        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin-learners" element={<AdminLearners />} />
+        <Route path="/admin-educators" element={<AdminEducators />} />
+        <Route path="/course-inlook/:courseId" element={<CourseInLook />} />
       </Routes>
-
     </Router>
   );
 }

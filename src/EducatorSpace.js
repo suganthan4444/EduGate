@@ -25,7 +25,7 @@ function EducatorSpace() {
 
     return (
         <div className="educator-space">
-            <nav className="sidebar">
+            <nav className="sidebar1">
                 <ul>
                     {/* Use the learnerId in the links */}
                     <li>
