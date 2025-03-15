@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/EduGate/static/css/main.2e3d77dc.css",
+    "main.js": "/EduGate/static/js/main.4fdd6fd3.js",
+    "static/js/488.226cebde.chunk.js": "/EduGate/static/js/488.226cebde.chunk.js",
+    "static/media/e-teaching.png": "/EduGate/static/media/e-teaching.78ddb884929eefff431b.png",
+    "static/media/Color.png": "/EduGate/static/media/Color.d071463dda5254fbed9a.png",
+    "static/media/e-learning.jpg": "/EduGate/static/media/e-learning.fd986c147ee20c65ed76.jpg",
+    "index.html": "/EduGate/index.html",
+    "main.2e3d77dc.css.map": "/EduGate/static/css/main.2e3d77dc.css.map",
+    "main.4fdd6fd3.js.map": "/EduGate/static/js/main.4fdd6fd3.js.map",
+    "488.226cebde.chunk.js.map": "/EduGate/static/js/488.226cebde.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2e3d77dc.css",
+    "static/js/main.4fdd6fd3.js"
+  ]
+}
