@@ -10,7 +10,7 @@
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 9999;
-    max-width: 80%; 
+    width: auto; 
     max-height: 80vh; 
     overflow-y: auto; 
     display: flex;
@@ -19,17 +19,26 @@
 }
 
 .add-course {
-    max-width: 400px;
-    padding: 20px;
+    width: auto;
+    height: 500px;
+    padding: 40px;
+    padding-top: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
+    display: block;
+    font-size: larger;
 }
 h2{
     text-align: center;
 }
 .submit-button{
-    width:70px;
+    width:80px;
+    background-color: cornflowerblue;
+    border-radius: 5px;
     align-self: center;
     margin-top: 20px;
+    align-self: center;
+    margin-left: 170px;
+    cursor: pointer;
 }

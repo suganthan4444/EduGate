@@ -1,7 +1,7 @@
 
 .one{
      
-    color:skyblue;
+    color:magenta;
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     padding: 20px;
   }
@@ -24,12 +24,6 @@
     color:brown;
     
   }
-  
-  
-   
-  /* CSS styles for the "Why Choose Us?" section */
-  
-   /* CSS styles for the "Why Choose Us?" section */
   
   .choose-us {
     max-width: 800px;
@@ -67,9 +61,22 @@
   .hover-content{
     color: darkblue;
   }
-  h2{
+  .choose{
     color:darkred;
     background-color:burlywood;
     width: auto;
   }
   
+  .home  a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    align-self: center;
+  }
+  
+  .home a:hover {
+    background-color: #0056b3;
+  }

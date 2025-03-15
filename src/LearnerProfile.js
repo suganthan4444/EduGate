@@ -1,14 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import './LearnerProfile.css';
 import api from './api';
+import { useNavigate, Link } from 'react-router-dom';
 
 function LearnerProfile() {
+    const learnerId = sessionStorage.getItem('learnerId');
     const [learnerData, setLearnerData] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [editableFields, setEditableFields] = useState(false);
-    const [updatedFields, setUpdatedFields] = useState({});
     const [csrfToken, setCsrfToken] = useState('');
+    const navigate = useNavigate();
+
+    const confirmLogout = () => {
+        const userConfirmed = window.confirm('Are you sure you want to log out?');
+        if (userConfirmed) {
+            sessionStorage.clear();
+            navigate('/home');
+        }
+    };
+
+    const linkStyle = {
+        textDecoration: 'none',
+        color: 'inherit',
+    };
 
     useEffect(() => {
         async function fetchCsrfToken() {
@@ -31,7 +45,6 @@ function LearnerProfile() {
                     'X-CSRFToken': csrfToken,
                 }});
                 setLearnerData(response.data);
-                setUpdatedFields(response.data);
             } catch (err) {
                 setError('Failed to fetch profile data. Please try again.');
             } finally {
@@ -42,29 +55,8 @@ function LearnerProfile() {
         fetchProfileData();
     }, [csrfToken]);
 
-    const handleEdit = () => {
-        setEditableFields(true);
-    };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setUpdatedFields({ ...updatedFields, [name]: value });
-    };
 
-    const handleSubmit = async () => {
-        try {
-            const learnerId = sessionStorage.getItem('learnerId');
-            await api.patch(`/update-learner-profile/${learnerId}`, updatedFields, {
-                headers: {
-                    'X-CSRFToken': csrfToken,
-                },
-            });
-            setLearnerData(updatedFields);
-            setEditableFields(false);
-        } catch (err) {
-            console.error('Error updating profile:', err);
-        }
-    };
 
     if (loading) {
         return <div>Loading...</div>;
@@ -75,8 +67,23 @@ function LearnerProfile() {
     }
 
     return (
+        <div className='profile'>
+        <div className='learner-navbar'>
+            <nav className="learner-sidebar">
+                <ul>
+                    <li>
+                        <Link to={`/learner-profile/${learnerId}`} style={linkStyle}>Your Profile</Link>
+                    </li>
+                    <li>
+                        <Link to={`/learner-courses/${learnerId}`} style={linkStyle}>Your Courses</Link>
+                    </li>
+                </ul>
+                <button onClick={confirmLogout}>Logout</button>
+            </nav>
+            </div>
         <div className="profile-container">
             <h2>My Profile</h2>
+            <div className='learner-picture'><img src={learnerData.profile_picture} alt={learnerData.name}></img></div>
             <div className="profile-field">
                 <label>Name:</label>
                 <input type="text" value={learnerData.name} readOnly />
@@ -87,64 +94,38 @@ function LearnerProfile() {
             </div>
             <div className="profile-field">
                 <label>Email:</label>
-                {editableFields ? (
                     <input
                         type="text"
-                        name="email"
-                        value={updatedFields.email || learnerData.email}
-                        onChange={handleChange}
+                        value={learnerData.email} readOnly
                     />
-                ) : (
-                    <input type="text" value={learnerData.email} readOnly />
-                )}
             </div>
             <div className="profile-field">
                 <label>Mobile Number:</label>
-                {editableFields ? (
+               
                     <input
                         type="text"
-                        name="mobile_no"
-                        value={updatedFields.mobile_no || learnerData.mobile_no}
-                        onChange={handleChange}
+value={learnerData.mobile_no} readOnly                    
                     />
-                ) : (
-                    <input type="text" value={learnerData.mobile_no} readOnly />
-                )}
             </div>
             <div className="profile-field">
                 <label>Highest Qualification:</label>
-                {editableFields ? (
+              
                     <input
                         type="text"
                         name="highest_qualification"
-                        value={updatedFields.highest_qualification || learnerData.highest_qualification}
-                        onChange={handleChange}
+                       value={learnerData.highest_qualification} readOnly
                     />
-                ) : (
-                    <input type="text" value={learnerData.highest_qualification} readOnly />
-                )}
             </div>
             <div className="profile-field">
                 <label>Username:</label>
-                {editableFields ? (
+               
                     <input
                         type="text"
                         name="username"
-                        value={updatedFields.username || learnerData.username}
-                        onChange={handleChange}
+                       value={learnerData.username} readOnly
                     />
-                ) : (
-                    <input type="text" value={learnerData.username} readOnly />
-                )}
             </div>
-            {editableFields && (
-    <div>
-        <button onClick={handleSubmit}>Submit Changes</button>
-        <p>Name and Date of Birth can't be edited.</p>
-    </div>
-)}
-            {!editableFields && <button onClick={handleEdit}>Edit Profile</button> }
-        </div>
+        </div></div>
     );
 }
 

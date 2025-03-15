@@ -4,26 +4,26 @@
     display: flex;
   }
   
-  .sidebar1 {
+  .learner-sidebar {
     height: 100%;
     width: 200px;
     background-color: aqua;
     padding: 10px;
   }
   
-  .sidebar1 ul {
+  .learner-sidebar ul {
     list-style: none;
     padding: 0;
   }
   
-  .sidebar1 ul li {
+  .learner-sidebar ul li {
     border:blue 2px solid;
     margin: 10px 0;
     text-decoration: none;
   }
   
-  .sidebar1 ul li a,
-  .sidebar1 ul li button {
+  .learner-sidebar ul li a,
+  .learner-sidebar ul li button {
     text-decoration: none;
     color: #333;
     padding: 8px 12px;
@@ -32,8 +32,8 @@
     cursor: pointer;
   }
   
-  .sidebar1 ul li a:hover,
-  .sidebar ul li button:hover {
+  .learner-sidebar ul li a:hover,
+  .learner-sidebar ul li button:hover {
     background-color: #ccc;
   }
   

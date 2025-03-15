@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import './LearnerSignUp.css';
 import api from './api';
@@ -13,6 +12,7 @@ function LearnerSignUp() {
         mobile_no: '',
         username: '',
         password: '',
+        profile_picture:'',
     });
 
     const [otp, setOtp] = useState('');
@@ -21,7 +21,6 @@ function LearnerSignUp() {
     const [isLoading, setIsLoading] = useState(false);
     const [errorFields, setErrorFields] = useState({
         email: '',
-        mobile_no: '',
         username: '',
     });
     
@@ -43,95 +42,90 @@ function LearnerSignUp() {
         fetchCsrfToken();
     }, []);
 
-const debouncedCheckLearnerUsernameAvailability = debounce(async (username) => {
-    if (!username) {
-        setUsernameAvailable(null); 
-        setErrorFields((prevFields) => ({
-            ...prevFields,
-            username: 'Username cannot be empty.',
-        }));
-        return;
-    }
-
-    try {
-        const response = await api.post('/check-learner-username-availability/', {
-            username, headers: {
-                'X-CSRFToken': csrfToken,
-            }
-        });
-
-        const isUnique = response.data.username.is_unique;
-        setUsernameAvailable(isUnique);
-
-        if (isUnique) {
+    const debouncedCheckLearnerUsernameAvailability = debounce(async (username) => {
+        if (!username) {
+            setUsernameAvailable(null);
             setErrorFields((prevFields) => ({
                 ...prevFields,
-                username: '', 
+                username: 'Username cannot be empty.',
             }));
-        } else {
-            setErrorFields((prevFields) => ({
-                ...prevFields,
-                username: '',
-            }));
+            return;
         }
-    } catch (error) {
-        console.error('Error checking username:', error);
-        setErrorFields((prevFields) => ({
-            ...prevFields,
-            username: 'Error checking username. Please try again.',
-        }));
-        setUsernameAvailable(false);
-    }
-}, 300);
-
-const debouncedCheckLearnerUniqueFields = debounce(async (email, mobile_no) => {
-    setIsLoading(true);
     
-    try {
-        const response = await api.post('/check-learner-unique-fields/', {
-            email,
-            mobile_no
-        },{headers: {
-            'X-CSRFToken': csrfToken,
-        }}
-    );
+        try {
+            const response = await api.post('/check-learner-username-availability/', {
+                username, headers: {
+                    'X-CSRFToken': csrfToken,
+                }
+            });
+    
+            const isUnique = response.data.username.is_unique;
+            setUsernameAvailable(isUnique);
+    
+            if (isUnique) {
+                setErrorFields((prevFields) => ({
+                    ...prevFields,
+                    username: '',
+                }));
+            } else {
+                setErrorFields((prevFields) => ({
+                    ...prevFields,
+                    username:'Username is unavailable, please choose another username',
+                }));
+            }
+        } catch (error) {
+    
+            console.error('Error checking username:', error);
+            setErrorFields((prevFields) => ({
+                ...prevFields,
+                username: 'Error checking username. Please try again.',
+            }));
+            setUsernameAvailable(false);
+        }
+    }, 300);
 
-    setErrorFields({
-        email: response.data.success && !response.data.email_exists ? '' : response.data.message,
-        mobile_no: response.data.success && !response.data.mobile_no_exists ? '' : response.data.message
-    });
+    const debouncedCheckLearnerUniqueFields = debounce(async (email) => {
+        try {
+            const response = await api.post('/check-learner-unique-fields/', 
+                email
+            ,{headers: {
+                'X-CSRFToken': csrfToken,
+            }}
+        );
+
+        if (!response.data.success) {    
+            setErrorFields({
+            email: response.data.message,
+            });  
+
+        }
+        else {
+            setErrorFields({});
+        }
+
+        if(response.data.success){
+
+            try {
+                const response = await api.post('/learner-send-otp/', { email },{headers: {
+                    'X-CSRFToken': csrfToken,
+                }});
+                alert(response.data.message);
+                setOtpSent(true);
+            } catch (error) {
+                console.error('Error sending OTP:', error);
+                alert('Failed to send OTP. Please try again.');
+            } finally {
+                setIsLoading(false);
+            }          
+        }
+
 
     } catch (error) {
         console.error('Error checking unique fields:', error);
         setErrorFields({
             email: 'Error checking email. Please try again.',
-            mobile_no: 'Error checking mobile number. Please try again.'
         });
     }
-
-    if (errorFields.email) {
-        alert(errorFields.email); 
-        return;
-    }
-    if (errorFields.mobile_no) {
-        alert(errorFields.mobile_no); 
-        return;
-    }
-
-    try {
-        const response = await api.post('/learner-send-otp/', { email },{headers: {
-            'X-CSRFToken': csrfToken,
-        }});
-        alert(response.data.message);
-        setOtpSent(true);
-    } catch (error) {
-        console.error('Error sending OTP:', error);
-        alert('Failed to send OTP. Please try again.');
-    } finally {
-        setIsLoading(false);
-    }
-
-
 }, 300);
 
     function validatePassword(password) {
@@ -159,11 +153,18 @@ const debouncedCheckLearnerUniqueFields = debounce(async (email, mobile_no) => {
     }
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: value,
-        }));
+        const { name, value, type, files } = e.target;
+        if (type === 'file') {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                [name]: files[0],
+            }));
+        } else {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                [name]: value,
+            }));
+        }
 
         if (name === 'username') {
             debouncedCheckLearnerUsernameAvailability(value);
@@ -175,44 +176,23 @@ const debouncedCheckLearnerUniqueFields = debounce(async (email, mobile_no) => {
         }
     };
 
-    // const handleProfilePictureChange = (e) => {
-    //     const file = e.target.files[0];
-    //     setFormData((prevFormData) => ({
-    //         ...prevFormData,
-    //         profile_picture: file,
-    //     }));
-    // };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
+    
+        setIsLoading(true);
 
         if (passwordErrors.length > 0) {
             alert('Please fix password errors before submitting.');
             return;
         }
+    
 
-        // try {
-        //     const formData = new FormData();
-        //     formData.append('profile_picture', formData.profile_picture);
-        //     formData.append('email', formData.email)
+        const { email} = formData;
+    
 
-        //     // Make a POST request to upload the profile picture
-        //     const response = await api.post('/api/upload-learner-profile-picture/', formData, {
-        //         headers: {
-        //             'Content-Type': 'multipart/form-data',
-        //             'X-CSRFToken': csrfToken,
-        //         },
-        //     });
+        await debouncedCheckLearnerUniqueFields(email);
 
-            // Handle the response
-        //     console.log(response.data); // Output the response data
-        // } catch (error) {
-        //     console.error('Error uploading profile picture:', error);
-        // }
-
-  
-        const { email, mobile_no } = formData;
-        await debouncedCheckLearnerUniqueFields(email, mobile_no);
+    };
 
     const handleOTPVerification = async (e) => {
         e.preventDefault();
@@ -263,7 +243,10 @@ const debouncedCheckLearnerUniqueFields = debounce(async (email, mobile_no) => {
                 otp: otp,
             };
 
-            const response = await api.post('/learner-signup/', dataToSend);
+            const response = await api.post('/learner-signup/', dataToSend, {headers: {
+                'Content-Type': 'multipart/form-data',
+                'X-CSRFToken': csrfToken,
+        }});
 
             if (response.status === 201) {
                 alert('Learner signed up successfully!');
@@ -300,7 +283,7 @@ const debouncedCheckLearnerUniqueFields = debounce(async (email, mobile_no) => {
                             </button>
                         </form>
                     ) : (
-                        <form  onSubmit={handleSubmit}>
+                        <form  onSubmit={handleSubmit} >
                         
                             <label>Full Name</label>
                             <input
@@ -322,6 +305,15 @@ const debouncedCheckLearnerUniqueFields = debounce(async (email, mobile_no) => {
                                 required
                             />
                             <br />
+
+                            <label>Profile Picture</label>
+                            <input
+                                type="file"
+                                name="profile_picture"
+                                accept="image/*"
+                                onChange={handleInputChange}
+                                required
+                            /><br></br>
 
                             <label>Highest Qualification</label>
                             <select
@@ -390,12 +382,8 @@ const debouncedCheckLearnerUniqueFields = debounce(async (email, mobile_no) => {
                                 name="mobile_no"
                                 value={formData.mobile_no}
                                 onChange={handleInputChange}
-                                onSubmit={handleSubmit}
                                 required
                             />
-                            {errorFields.mobile_no && <span style={{ color: 'red' }}>{errorFields.mobile_no}</span>}
-                            <br />
-
                             <label>Username</label>
                             <input
                             type="text"
@@ -441,5 +429,5 @@ const debouncedCheckLearnerUniqueFields = debounce(async (email, mobile_no) => {
             </div>
         </div>
    );
-}}
+}
 export default LearnerSignUp;

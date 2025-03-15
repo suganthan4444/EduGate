@@ -25,7 +25,6 @@ function AboutUs() {
 
   <div class="cta">
     <p>Join the Digital Learning Revolution!</p>
-    <a href="/courses">Explore Courses</a>
   </div>
 </section>
 

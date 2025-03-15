@@ -33,11 +33,11 @@ function CourseInLook() {
 
   return (
     <div className="course-details">
-      <img src={course.course_thumbnail} alt={course.course_name} />
-      <h2 className="course-name">{course.course_name}</h2>
-      <p className="educator-name">Educator: {course.educator_name}</p>
-      <p className="duration">Duration: {course.course_duration}</p>
-      <p className="description">Description: {course.course_description}</p>
+      <img src={course.course_thumbnail} alt={course.course_name} /><br></br>
+      <h2 className="course-name">{course.course_name}</h2><br></br>
+      <p className="educator-name">Educator: <b>{course.educator_name}</b></p><br></br>
+      <p className="duration">Duration: <b>{course.course_duration}</b></p><br></br>
+      <p className="description"><b>Description: </b><br></br>{course.course_description}</p><br></br>
       {course.course_video && (
   <div className="video-container" onContextMenu={(e) => e.preventDefault()}>
     <video
@@ -49,11 +49,11 @@ function CourseInLook() {
       controls
       controlsList="nodownload"
       allowFullScreen
-    ></video>
+    ></video><br></br>
   </div>
 )}
-
-      <p className="exercise">Exercise Link: {course.course_exercise}</p>
+<div><br></br>
+      <p className="exercise">Exercise Link: <a href={course.course_exercise}>Click here for Course Excsercise</a></p></div>
     </div>
   );
 }

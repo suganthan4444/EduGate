@@ -1,5 +1,20 @@
 .course-details img {
-    width: 50%;
+    width: 70%;
     height:10cm;
     align-self: center;
+}
+.course-details{
+    margin:auto;
+    width:700px;
+    height: 1000px;
+    border:2px solid #b73a4c;
+    align-content: center;
+    align-self: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 2cm;
+    margin-bottom: 2cm;
+}
+.excercise{
+    padding-top: 2cm;
 }

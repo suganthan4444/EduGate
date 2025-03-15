@@ -1,10 +1,12 @@
 table, th, td{
     border: 2px solid blue;
+    font-size: large;
 }
 
 .buttons button{
     margin-left: 15px;
     width:80px;
+    border-radius: 5px;
 }
 .admin-courses-container {
     display: flex;
@@ -13,4 +15,23 @@ table, th, td{
 }
 table{
     width: 90%;
+}
+td{
+    text-align: center;
+}
+.navi:hover{
+    background-color: aquamarine;
+    color: darkmagenta;
+    cursor: pointer;
+}
+.buttons button:hover{
+    cursor: pointer;
+}
+.release:hover{
+    color:white;
+    background-color: green;
+}
+.reject:hover{
+    color:white;
+    background-color: red;
 }

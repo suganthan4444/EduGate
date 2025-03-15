@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import api from './api';
 import './AdminCourses.css';
+import { useNavigate } from 'react-router-dom';
 
 function AdminCourses() {
     const [requestedCourses, setRequestedCourses] = useState([]);
     const [releasedCourses, setReleasedCourses] = useState([]);
     const [csrfToken, setCsrfToken] = useState('');
+    const navigate= useNavigate();
 
     useEffect(() => {
         async function fetchCsrfToken() {
@@ -28,7 +30,7 @@ function AdminCourses() {
         try {
             const response = await api.get('/admin-courses');
             const courses = response.data;
-            const requested = courses.filter(course => !course.course_release_status);
+            const requested = courses.filter(course => !course.course_release_status && !course.course_reject_status);
             const released = courses.filter(course => course.course_release_status);
             setRequestedCourses(requested);
             setReleasedCourses(released);
@@ -51,21 +53,14 @@ function AdminCourses() {
     };
     
 
-    const handleReject = async (courseId, reason) => {
+    const handleReject = async (courseId) => {
         try {
-            await api.post(`/reject-course/${courseId}`, { reason });
+            await api.post(`/reject-course/${courseId}`, {headers: {
+                'X-CSRFToken': csrfToken
+            }});
             fetchCourses();
         } catch (error) {
             console.error('Error rejecting course:', error);
-        }
-    };
-
-    const handleDelete = async (courseId, reason) => {
-        try {
-            await api.delete(`/delete-course/${courseId}`, { reason });
-            fetchCourses();
-        } catch (error) {
-            console.error('Error deleting course:', error);
         }
     };
 
@@ -81,22 +76,20 @@ function AdminCourses() {
                         <th>Educator Name</th>
                         <th>Price</th>
                         <th>Actions</th>
-                        <th>Reject Reason</th>
                     </tr>
                 </thead>
                 <tbody>
                     {requestedCourses.map(course => (
                         <tr key={course.course_id}>
-                            <td>{course.course_id}</td>
-                            <td>{course.course_name}</td>
+                            <td >{course.course_id}</td>
+                            <td onClick={() => navigate(`/course-inlook/${course.course_id}`)} className='navi'>{course.course_name}</td>
                             <td>{course.educator_id}</td>
                             <td>{course.educator_name}</td>
                             <td>{course.course_price}</td>
                             <td className="buttons">
-                                <button onClick={() => handleRelease(course.course_id)}>Release</button>
-                                <button onClick={() => handleReject(course.course_id, 'Some reason')}>Reject</button>
+                                <button className="release" onClick={() => handleRelease(course.course_id)}>Release</button>
+                                <button className="reject" onClick={() => handleReject(course.course_id)}>Reject</button>
                             </td>
-                            <td><input type="text" /></td>
                         </tr>
                     ))}
                 </tbody>
@@ -111,20 +104,16 @@ function AdminCourses() {
                         <th>Educator ID</th>
                         <th>Educator Name</th>
                         <th>Price</th>
-                        <th>Actions</th>
-                        <th>Delete Reason</th>
                     </tr>
                 </thead>
                 <tbody>
                     {releasedCourses.map(course => (
                         <tr key={course.course_id}>
                             <td>{course.course_id}</td>
-                            <td>{course.course_name}</td>
+                            <td onClick={() => navigate(`/course-inlook/${course.course_id}`)} className='navi'>{course.course_name}</td>
                             <td>{course.educator_id}</td>
                             <td>{course.educator_name}</td>
                             <td>{course.course_price}</td>
-                            <td><button onClick={() => handleDelete(course.course_id, 'Some reason')}>Delete</button></td>
-                            <td><input type="text" /></td>
                         </tr>
                     ))}
                 </tbody>

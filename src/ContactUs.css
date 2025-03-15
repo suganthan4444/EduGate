@@ -7,16 +7,21 @@
         align-items: center;
  }
  .contact-us{
-    background-color: burlywood;
+   text-align: center;
+   background-color: #8a4af3;
  }
- img{
+ .logo {
     width: 350px;
     align-items: center;
  }
  .cont{
-   color: aliceblue;
+   color: #23074d;
  }
  .mail{
 font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 color:crimson;
+ }
+ .contact-info{
+   display: block;
+   margin-left: 2cm;
  }

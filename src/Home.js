@@ -4,14 +4,17 @@ import './Home.css';
 function Home() {
   return (
     <div className="home">
+      
       <header>
         <div class="one">
-        <h1 class="two">Welcome to EduGate</h1>
+          
+        <h1 class="two">Welcome to EduGate</h1><br></br>
+        <a href="/courses">Explore Courses</a><br></br>
         <p class="third">EduGate is a modern, contemporary and creative educational website.
 Certainly!
  we believe in the power of education to transform lives. Our mission is to provide high-quality educational resources to learners of all ages, backgrounds, and abilities. Whether you're a student, a professional looking to upskill, or simply curious about the world around you, we have something for you</p></div>
  <section class="choose-us">
-    <h2>Why Choose Us?</h2>
+    <h2 className='choose'>Why Choose Us?</h2>
     <div class="choose-us-item">
         <h3>Comprehensive Learning Materials</h3>
         <p class="hover-content">Our platform offers a wide range of courses, tutorials, and resources covering various subjects, from mathematics and science to literature and history.</p>
@@ -33,6 +36,7 @@ Certainly!
         
 
       </header>
+      
     </div>
   );
 }

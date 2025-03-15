@@ -7,13 +7,14 @@
 
 .course-card {
     width: 180px;
-    height: 200px;
+    height: 250px;
     background-color: #f9f9f9;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease;
     align-content: center;
+    text-align: center;
 }
 
 .course-card:hover {
@@ -30,7 +31,7 @@
 }
 
 .course-info {
-    padding: 15px;
+    padding: 5px;
 }
 
 .course-info h3 {
@@ -50,19 +51,32 @@
     height: 1cm;
     cursor: pointer;
 }
-.sidebar li, button{
+.sidebar li{
     padding:10px;
+    margin-bottom: 10px;
     cursor: pointer;
 }
 .sidebar{
-    background-color:rgb(4, 4, 23);
-    color: white;
+    background-color:white;
+    color: blueviolet;
+    text-align: center;
 }
 .sidebar li:hover{
-    color: black;
-    background-color: white;
+    color: white;
+    background-color: green;
 }
 .sidebar a.active{
     background-color: green;
     color: white;
+}
+.sidebar button{
+    height: 25px;
+    width: 50px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    border-radius: 10%;
+}
+.sidebar button:hover{
+    background-color: aquamarine;
+    color: #000;
 }

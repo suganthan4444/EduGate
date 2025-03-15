@@ -1,92 +1,75 @@
-import React, { useEffect, useState } from 'react';
+// LearnerProfile.js
+
+import React, { useState, useEffect } from 'react';
+import api from './api';
+import { useNavigate, Link } from 'react-router-dom'; 
 import './LearnerCourses.css';
-import { useParams } from 'react-router-dom';
 
 function LearnerCourses() {
-  const { courseId } = useParams();
-  const [course, setCourse] = useState(null);
-  const [courseExercises, setCourseExercises] = useState([]);
-  const [courseVideos, setCourseVideos] = useState([]);
-  const [error, setError] = useState(null);
+    const learnerId  = sessionStorage.getItem('learnerId');
+    const [learnerCourses, setLearnerCourses] = useState([]);
+    console.log({learnerId})
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch(`/api/learner-courses/${courseId}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch course data');
+    const confirmLogout = () => {
+        const userConfirmed = window.confirm('Are you sure you want to log out?');
+        if (userConfirmed) {
+            sessionStorage.clear();
+            navigate('/home');
         }
-        return response.json();
-      })
-      .then(data => {
-        setCourse(data.course);
-        setCourseExercises(data.exercises);
-        setCourseVideos(data.videos);
-      })
-      .catch(error => {
-        console.error('Error fetching course data:', error);
-        setError('Failed to load course data. Please try again later.');
-      });
-  }, [courseId]);
+    };
 
-  const handleCourseCompletion = () => {
-    const allVideosWatched = courseVideos.every(video => video.isWatched);
-    const allExercisesCompleted = courseExercises.every(exercise => exercise.isCompleted);
+    const linkStyle = {
+        textDecoration: 'none',
+        color: 'inherit',
+    };
 
-    if (allVideosWatched && allExercisesCompleted) {
-      alert('Course completed! You have earned a completion certificate.');
-    } else {
-      alert('Please complete all videos and exercises to finish the course.');
-    }
+    useEffect(() => {
+        fetchLearnerCourses();
+    });
+
+    const fetchLearnerCourses = async () => {
+      try {
+          const response = await api.get(`/api/learner-courses/${learnerId}`);
+          const data = response.data;
+          if (!data.success) {
+              throw new Error('Failed to fetch learner courses');
+          }
+          
+          console.log({data})
+          setLearnerCourses(data.data.filter(course => course.course_purchase_status));
+      } catch (error) {
+          console.error('Error fetching learner courses:', error.message);
+      }
   };
 
-  return (
-    <div className="course-details">
-      {error ? (
-        <p className="error">{error}</p>
-      ) : course ? (
-        <>
-          <h2>{course.Course_Name}</h2>
-          <img
-            src={course.Course_Thumbnail}
-            alt={`${course.Course_Name} thumbnail`}
-            className="course-thumbnail"
-          />
-          <p>Duration: {course.Course_Duration}</p>
-          <h3>Educator: {course.Course_Educator_Name}</h3>
-          <p>{course.Course_Description}</p>
-
-          <div className="course-videos">
-            <h3>Course Videos</h3>
-            {courseVideos.map(video => (
-              <div key={video.Course_Video_ID}>
-                <h4>{video.title}</h4>
-                {/* Include video component or iframe for video playback here */}
-                {/* E.g., <video src={video.url} controls /> */}
-                <p>Status: {video.isWatched ? 'Watched' : 'Not watched'}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="course-exercises">
-            <h3>Course Exercises</h3>
-            {courseExercises.map(exercise => (
-              <div key={exercise.Course_Exercise_ID}>
-                <h4>{exercise.title}</h4>
-                {/* Include exercise component or form for exercise handling here */}
-                {/* E.g., <p>{exercise.description}</p> */}
-                <p>Status: {exercise.isCompleted ? 'Completed' : 'Not completed'}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Button to handle course completion */}
-          <button onClick={handleCourseCompletion}>Check Course Completion</button>
-        </>
-      ) : (
-        <p>Loading course data...</p>
-      )}
-    </div>
-  );
+    return (
+        <div>
+            <div className='learner-navbar'>
+            <nav className="learner-sidebar">
+                <ul>
+                    <li>
+                        <Link to={`/learner-profile/${learnerId}`} style={linkStyle}>Your Profile</Link>
+                    </li>
+                    <li>
+                        <Link to={`/learner-courses/${learnerId}`} style={linkStyle}>Your Courses</Link>
+                    </li>
+                </ul>
+                <button onClick={confirmLogout}>Logout</button>
+            </nav>
+            </div>
+            <h1>Learner Profile</h1>
+            <div className="learner-cards">
+                {learnerCourses.map(course => (
+                    <div key={course.course_id} className="learner-card">
+                      <img src={course.course_thumbnail} alt={course.course_name} className='thumb' onClick={() => navigate(`/course-inlook/${course.course_id}`)}></img>
+                        <h3 className='course-name' onClick={() => navigate(`/course-inlook/${course.course_id}`)}>{course.course_name}</h3>
+                        <p onClick={() => navigate(`/educator-preview/${course.educator_id}`)} className='ed-name'>by {course.educator_name}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 }
 
 export default LearnerCourses;

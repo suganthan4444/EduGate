@@ -1,0 +1,31 @@
+.learner-card {
+    width: 180px;
+    height: 200px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    align-content: center;
+}
+
+.learner-card:hover {
+    box-shadow: 0 0 30px #054be2ea;
+    cursor: pointer;
+}
+
+.learner-cards img {
+    width: 88%;
+    height: 100px;
+    margin: 10px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 15px;
+    
+}
+.course-name{
+    text-align: center;
+}
+.ed-name:hover{
+    color: red;
+    text-decoration: underline;
+}

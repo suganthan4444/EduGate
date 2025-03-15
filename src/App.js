@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, NavLink, Navigate } from 'react-router-dom';
+import {React} from 'react';
+import { BrowserRouter as Router, Routes, Route, NavLink, Navigate} from 'react-router-dom';
 import './App.css';
 import logo from './Color.png';
 import { Helmet } from 'react-helmet';
@@ -18,8 +18,7 @@ import LearnerSpace from './LearnerSpace';
 import LearnerProfile from './LearnerProfile';
 import LearnerCourses from './LearnerCourses';
 import Courses from './Courses';
-import Learners from './Learners';
-import Educators from './Educators';
+import EnrollCourse from './EnrollCourse';
 import EducatorSpace from './EducatorSpace';
 import EducatorProfile from './EducatorProfile';
 import EducatorCourses from './EducatorCourses';
@@ -27,17 +26,19 @@ import AddCourse from './AddCourse';
 import AdminHome from './AdminHome';
 import AdminLogin from './AdminLogin';
 import AdminCourses from './AdminCourses';
-import AdminEducators from './AdminEducators';
 import AdminLearners from './AdminLearners';
 import CourseInLook from './CourseInLook';
+import CoursePreview from './CoursePreview';
+import EducatorPreview from './EducatorPreview';
+import LearnerCoursePreview from './LearnerCoursePreview';
 
 
 function App() {
 
-
+  const basename = process.env.NODE_ENV === "production" ? "/EduGate" : "/";
   
   return (
-    <Router>
+    <Router basename={basename}>
       <Helmet>
         <title>EduGate</title>
         <meta name="description" content="This is my React app" />
@@ -95,9 +96,8 @@ function App() {
         <Route path="/learner-space/*" element={<LearnerSpace />} />
         <Route path="/learner-profile/*" element={<LearnerProfile />} />
         <Route path="/learner-courses/*" element={<LearnerCourses />} />
-        <Route path="/courses" element={<Courses />} />
-        <Route path="/learners" element={<Learners />} />
-        <Route path="/educators" element={<Educators />} />
+        <Route path="/courses" element={<Courses/>} />
+        <Route path="/enroll-course/:course_id" element={<EnrollCourse />} />
         <Route path="/educator-space/*" element={<EducatorSpace />} />
         <Route path="/educator-profile/*" element={<EducatorProfile />} />
         <Route path="/educator-courses/*" element={<EducatorCourses />} />
@@ -106,8 +106,10 @@ function App() {
         <Route path="/admin-home" element={<AdminHome />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin-learners" element={<AdminLearners />} />
-        <Route path="/admin-educators" element={<AdminEducators />} />
         <Route path="/course-inlook/:courseId" element={<CourseInLook />} />
+        <Route path="/course-preview/:course_id" element={<CoursePreview/>} />
+        <Route path="/educator-preview/:educator_id" element={<EducatorPreview/>} />
+        <Route path="/learner-course-preview/:course_id" element={<LearnerCoursePreview/>} />
       </Routes>
     </Router>
   );

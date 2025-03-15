@@ -1,10 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import './EducatorSignUp.css';
 import api from './api';
 import { debounce } from 'lodash';
-
-
 
     function EducatorSignUp() {
     const [formData, setFormData] = useState({
@@ -15,6 +12,8 @@ import { debounce } from 'lodash';
         mobile_no: '',
         username: '',
         password: '',
+        bio: '',
+        profile_picture:'',
     });
 
     const [otp, setOtp] = useState('');
@@ -23,14 +22,12 @@ import { debounce } from 'lodash';
     const [isLoading, setIsLoading] = useState(false);
     const [errorFields, setErrorFields] = useState({
         email: '',
-        mobile_no: '',
         username: '',
     });
     
     const [passwordErrors, setPasswordErrors] = useState([]);
-    const [csrfToken, setCsrfToken] = useState('');
-
     const [usernameAvailable, setUsernameAvailable] = useState(null);
+    const [csrfToken, setCsrfToken] = useState('');
 
 useEffect(() => {
     async function fetchCsrfToken() {
@@ -73,9 +70,10 @@ const debouncedCheckEducatorUsernameAvailability = debounce(async (username) => 
         } else {
             setErrorFields((prevFields) => ({
                 ...prevFields,
-                username: response.data.username.message || 'Username is unavailable.',
+                username:'Username is already taken, Choose another username',
             }));
         }
+        
     } catch (error) {
 
         console.error('Error checking username:', error);
@@ -87,25 +85,46 @@ const debouncedCheckEducatorUsernameAvailability = debounce(async (username) => 
     }
 }, 300);
 
-const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => {
+const debouncedCheckEducatorUniqueFields = debounce(async (email) => {
     try {
-        const response = await api.post('/check-educator-unique-fields/', {
-            email,
-            mobile_no
-        },{headers: {
+        const response = await api.post('/check-educator-unique-fields/', 
+        {email
+        ,headers: {
             'X-CSRFToken': csrfToken,
         }}
-    );
+    );   
 
-        setErrorFields({
-            email: response.data.email.is_unique ? '' : response.data.email.message,
-            mobile_no: response.data.mobile_no.is_unique ? '' : response.data.mobile_no.message
-        });
+        if (!response.data.success) {    
+            setErrorFields({
+            email: response.data.message,
+            });  
+
+        }
+        else {
+            setErrorFields({});
+        }
+
+        if(response.data.success){
+
+            try {
+                const response = await api.post('/educator-send-otp/', { email },{headers: {
+                    'X-CSRFToken': csrfToken,
+                }});
+                alert(response.data.message);
+                setOtpSent(true);
+            } catch (error) {
+                console.error('Error sending OTP:', error);
+                alert('Failed to send OTP. Please try again.');
+            } finally {
+                setIsLoading(false);
+            }          
+        }
+
+
     } catch (error) {
         console.error('Error checking unique fields:', error);
         setErrorFields({
             email: 'Error checking email. Please try again.',
-            mobile_no: 'Error checking mobile number. Please try again.'
         });
     }
 }, 300);
@@ -135,11 +154,18 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
     }
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: value,
-        }));
+        const { name, value, type, files } = e.target;
+        if (type === 'file') {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                [name]: files[0], 
+            }));
+        } else {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                [name]: value,
+            }));
+        }
 
         if (name === 'username') {
             debouncedCheckEducatorUsernameAvailability(value);
@@ -162,33 +188,14 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
         }
     
 
-        const { email, mobile_no } = formData;
+        const { email} = formData;
     
 
-        await debouncedCheckEducatorUniqueFields(email, mobile_no);
+        await debouncedCheckEducatorUniqueFields(email);
 
-        if (errorFields.email) {
-            alert(errorFields.email);
-            return;
-        }
-        if (errorFields.mobile_no) {
-            alert(errorFields.mobile_no); 
-            return;
-        }
     
         setIsLoading(true);
-        try {
-            const response = await api.post('/educator-send-otp/', { email },{headers: {
-                'X-CSRFToken': csrfToken,
-            }});
-            alert(response.data.message);
-            setOtpSent(true);
-        } catch (error) {
-            console.error('Error sending OTP:', error);
-            alert('Failed to send OTP. Please try again.');
-        } finally {
-            setIsLoading(false);
-        }
+        
     };
     
     
@@ -246,6 +253,7 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
             };
 
             const response = await api.post('/educator-signup/', dataToSend, {headers: {
+                'Content-Type': 'multipart/form-data',
                 'X-CSRFToken': csrfToken,
         }});
 
@@ -263,7 +271,7 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
 
     return (
         <div className="educator-component-background">
-            <div className="container4">
+            <div className="container2">
             <h2>Educator Sign Up</h2>
             {isLoading && <p>Loading...</p>}
             {!isOtpVerified ? (
@@ -283,7 +291,7 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
                             </button>
                         </form>
                     ) : (
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleSubmit} encType="multipart/form-data">
                         
                             <label>Full Name</label>
                             <input
@@ -305,6 +313,15 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
                                 required
                             />
                             <br />
+
+                            <label>Profile Picture</label>
+                            <input
+                                type="file"
+                                name="profile_picture"
+                                accept="image/*"
+                                onChange={handleInputChange}
+                                required
+                            /><br></br>
 
                             <label>Highest Qualification</label>
                             <select
@@ -361,12 +378,8 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
                                 name="mobile_no"
                                 value={formData.mobile_no}
                                 onChange={handleInputChange}
-                                onSubmit={handleSubmit}
                                 required
                             />
-                            {errorFields.mobile_no && <span style={{ color: 'red' }}>{errorFields.mobile_no}</span>}
-                            <br />
-
                             <label>Username</label>
                             <input
                             type="text"
@@ -377,10 +390,10 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
                             />
                             {errorFields.username && <span style={{ color: 'red' }}>{errorFields.username}</span>}
 {usernameAvailable && (
-    <p style={{ color: 'green' }}>Username is available.</p>
+    <p style={{ color: 'green' }}>Username is available</p>
 )}
 {usernameAvailable === false && !errorFields.username && (
-    <p style={{ color: 'red' }}>Username is unavailable.</p>
+    <p style={{ color: 'red' }}></p>
 )}
                             <br />
 
@@ -399,6 +412,14 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
                             ))}
                             <br />
 
+                            <label>Bio</label>
+                            <textarea
+                               name="bio"
+                               value={formData.bio}
+                               onChange={handleInputChange}
+                               required
+                            />
+
                             <input type="submit" value="Sign Up" />
                         </form>
                     )}
@@ -406,7 +427,7 @@ const debouncedCheckEducatorUniqueFields = debounce(async (email, mobile_no) => 
                 </>
             ) : (
                 <div>
-                    <p>OTP verified successfully! Proceed with the next steps.</p>
+                    <p>OTP verified and Educator Signed Upsuccessfully! Proceed with the next steps.</p>
                     <a href="/educator-signin">Sign In Now</a>
 
                 </div>

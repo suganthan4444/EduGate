@@ -21,9 +21,8 @@ function AdminHome() {
         <div className="admin-home-container">
             <h1 className="admin-welcome">Welcome Admin</h1>
             <div className="admin-buttons">
-                <button onClick={handleViewEducators} className="admin-button">View Educators</button>
-                <button onClick={handleViewLearners} className="admin-button">View Learners</button>
-                <button onClick={handleViewCourseRequests} className="admin-button">View Courses</button>
+                <button onClick={handleViewLearners} className="admin-button">Learner Courses</button>
+                <button onClick={handleViewCourseRequests} className="admin-button">Educator Courses</button>
             </div>
         </div>
     );

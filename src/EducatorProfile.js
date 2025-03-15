@@ -77,11 +77,11 @@ function EducatorProfile() {
                     <Link to={`/educator-courses/${educatorId}`} style={linkStyle}>Your Courses</Link>
                 </li>
             </ul>
-            {/* Logout button */}
             <button onClick={confirmLogout}>Logout</button>
         </nav>
         <div className="profile-container">
             <h2>My Profile</h2>
+            <div className='educator-picture'><img src={educatorData.profile_picture} alt={educatorData.name}></img></div>
             <div className="profile-field">
                 <label>Name:</label>
                 <input type="text" value={educatorData.name} readOnly />
@@ -105,6 +105,10 @@ function EducatorProfile() {
             <div className="profile-field">
                 <label>Username:</label>
                 <input type="text" value={educatorData.username} readOnly />
+            </div>
+            <div className="profile-field">
+                <label>Bio:</label>
+                <input type="text" value={educatorData.bio} readOnly />
             </div>
         </div>
         </div>

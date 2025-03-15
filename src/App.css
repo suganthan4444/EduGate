@@ -28,6 +28,7 @@
     .right ul {
         display: flex;
         list-style: none;
+        margin-right: -60px;
     }
     
     .right ul li a {
@@ -40,7 +41,7 @@
     }
     
     .right ul li a:hover {
-        background-color: #fff;
+        background-color:plum;
         border-radius: 7px;
         color: rgb(22, 7, 36);
     }
@@ -158,4 +159,8 @@ h1 {
 }
 .edugate-logo{
   size: 50px;
+}
+
+.right ul li{
+  padding:5px;
 }

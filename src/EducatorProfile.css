@@ -1,0 +1,40 @@
+.educator-picture img{
+    text-align: center;
+    align-self: center;
+    align-items: center;
+    margin-left: 170px;;
+    height: 200px;
+    width: 200px;
+}
+.sidebar li{
+    padding:10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.sidebar{
+    background-color:white;
+    color: blueviolet;
+    width: 150px;
+    text-align: center;
+    margin-top:30px;
+    margin-left:30px;
+}
+.sidebar li:hover{
+    color: white;
+    background-color: green;
+}
+.sidebar li.active{
+    background-color: green;
+    color: white;
+}
+.sidebar button{
+    height: 25px;
+    width: 50px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    border-radius: 10%;
+}
+.sidebar button:hover{
+    background-color: aquamarine;
+    color: #000;
+}

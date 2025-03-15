@@ -56,7 +56,6 @@ function EducatorCourses({ educatorId }) {
                         <Link to={`/educator-courses/${educatorId}`} style={linkStyle}>Your Courses</Link>
                     </li>
                 </ul>
-                {/* Logout button */}
                 <button onClick={confirmLogout}>Logout</button>
             </nav>
             </div>
@@ -66,6 +65,14 @@ function EducatorCourses({ educatorId }) {
             <>
               {courses.map(course => {
                 console.log("Image URL:", course.course_thumbnail);
+                let status = '';
+                        if (!course.course_release_status && !course.course_reject_status) {
+                            status = 'Requested';
+                        } else if (course.course_release_status) {
+                            status = 'Released';
+                        } else if (course.course_reject_status) {
+                            status = 'Rejected';
+                        }
                 return (
                   <Link to={`/course-inlook/${course.course_id}`} key={course.course_id}>
                     <div className="course-card">
@@ -73,6 +80,7 @@ function EducatorCourses({ educatorId }) {
                       <div className="course-info">
                         <h3>{course.course_name}</h3>
                         <p className="price">Price: {course.course_price}</p>
+                        <p className="status">Status: {status}</p>
                       </div>
                     </div>
                   </Link>

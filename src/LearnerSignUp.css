@@ -12,13 +12,21 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 400px; 
-    height: 625px;
+    height: auto;
     position: absolute;
-    top: 60%;
+    top: 70%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
+.learner-component-background{
+    background-image: url('e-learning.jpg'); 
+    background-size: cover;
+    background-position: center;
+    color: blue;
+    height: 22cm ;
+
+}
 
 .container4 form {
     width: 100%;
