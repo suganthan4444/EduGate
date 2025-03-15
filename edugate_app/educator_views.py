@@ -96,25 +96,18 @@ def check_educator_username_availability(request):
 
 
 @csrf_exempt
+@api_view(['POST'])
 def check_educator_unique_fields(request):
     if request.method == 'POST':
         email = request.data.get('email')
-        mobile_no = request.data.get('mobile_no')
-        logger.debug(f"Stored Email: {email}, Stored Mobile No: {mobile_no}")
+        logger.debug(f"Input Email: {email}")
 
-        email_exists = Educator.objects.filter(email=email).exists()
-        mobile_no_exists = Educator.objects.filter(mobile_no=mobile_no).exists()
+        email_exists = Educator.objects.filter(email__iexact=email).exists()
 
         if email_exists:
             return JsonResponse({
                 "success": False,
                 "message": "Email is already in use. Please choose another email."
-            })
-
-        if mobile_no_exists:
-            return JsonResponse({
-                "success": False,
-                "message": "Mobile No is already in use. Please choose another Mobile No."
             })
 
         return JsonResponse({
@@ -292,7 +285,6 @@ def educator_space(request, educator_id):
     except Educator.DoesNotExist:
         return JsonResponse({"success": False, "message": "Educator does not exist."})
 
-@login_required
 @csrf_exempt    
 @api_view(['GET'])
 def educator_profile(request):
@@ -308,13 +300,14 @@ def educator_profile(request):
             'mobile_no': educator.mobile_no,
             'highest_qualification': educator.highest_qualification,
             'username': educator.username,
+            'profile_picture':request.build_absolute_uri(educator.profile_picture.url),
+            'bio':educator.bio,
         }
         return JsonResponse(data, status=200)
     except Educator.DoesNotExist:
         print('Educator not')
         return JsonResponse({'error': 'Educator not found'}, status=404)
         
-@login_required
 @csrf_exempt
 @api_view(['GET'])
 def educator_courses(request):
@@ -326,12 +319,13 @@ def educator_courses(request):
             'course_name': course.course_name,
             'course_thumbnail': request.build_absolute_uri(course.course_thumbnail.url),
             'course_price': course.course_price,
+            'course_release_status': course.course_release_status,
+            'course_reject_status': course.course_reject_status,
         } for course in courses]
         return JsonResponse(data, safe=False)
      except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-@login_required
 def add_educator_courses(request):
     if request.method == 'POST':
         educator_name = request.POST.get('educatorName')
@@ -343,6 +337,7 @@ def add_educator_courses(request):
         course_price = request.POST.get('coursePrice')
         course_video = request.FILES.get('videoFile')
         course_exercise_url = request.POST.get('exerciseURL')
+        course_domain = request.POST.get('courseDomain')
 
         educator_course = EducatorCourses(
             educator_name=educator_name,
@@ -354,13 +349,13 @@ def add_educator_courses(request):
             course_video=course_video,
             course_price = course_price,
             course_exercise_url=course_exercise_url,
+            course_domain = course_domain,
         )
         educator_course.save()
         return JsonResponse({'message': 'Course added successfully'}, status=201)
     else:
         return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)
     
-@login_required
 def educator_course_inlook(request, course_id):
     course = get_object_or_404(EducatorCourses, course_id=course_id)
     data = {

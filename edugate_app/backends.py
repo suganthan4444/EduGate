@@ -40,9 +40,9 @@ class EducatorBackend(BaseBackend):
             print("No Educator Exists")
             return None
 
-    def get_user(self, user_id):
+    def get_user(self, user_educator_id):
         try:
-            return Educator.objects.get(pk=user_id)
+            return Educator.objects.get(pk=user_educator_id)
         except Educator.DoesNotExist:
             return None
         

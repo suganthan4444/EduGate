@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 import random
 from django.db.models import Q
-from edugate_app.models import Learner
+from edugate_app.models import Learner, ReleasedCourses, LearnerCourses
 from .serializers import LearnerSerializer
 import logging
 from django.urls import reverse
@@ -25,6 +25,7 @@ from django.contrib.auth.hashers import check_password, make_password
 from edugate_app.backends import LearnerBackend
 from django.contrib.auth.backends import BaseBackend, ModelBackend
 import json
+from django.shortcuts import get_object_or_404
 
 logger = logging.getLogger(__name__)
 @csrf_exempt
@@ -91,29 +92,20 @@ def check_learner_username_availability(request):
             "message": "Invalid request method. Only POST is allowed."
         }, status=400)
 
+@api_view(['POST'])
 @csrf_exempt
 def check_learner_unique_fields(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        email = data.get('email')
-        mobile_no = data.get('mobile_no')
-        logger.debug(f"User input email: {email}, User input Mobile No: {mobile_no}")
+        email = request.data.get('email')
+        logger.debug(f"User input email: {email}")
 
-        email_exists = Learner.objects.filter(email=email).exists()
-        mobile_no_exists = Learner.objects.filter(mobile_no=mobile_no).exists()
+        email_exists = Learner.objects.filter(email__iexact=email).exists()
 
         if email_exists:
             print('Email is already in use')
             return JsonResponse({
                 "success": False,
                 "message": "Email is already in use. Please choose another email."
-            })
-
-        if mobile_no_exists:
-            print('Mobile No is already in use')
-            return JsonResponse({
-                "success": False,
-                "message": "Mobile No is already in use. Please choose another Mobile No."
             })
 
         return JsonResponse({
@@ -295,16 +287,15 @@ def learner_profile(request):
         learner_id = request.GET['learnerId']
         print(f'{learner_id}')
         learner = Learner.objects.get(learner_id=learner_id)
-        #profile_picture_url = learner.profile_picture.url
         
         data = {
-            #'profilePicture': profile_picture_url,
             'name': learner.name,
             'dob': learner.dob,
             'email': learner.email,
             'mobile_no': learner.mobile_no,
             'highest_qualification': learner.highest_qualification,
             'username': learner.username,
+            'profile_picture': request.build_absolute_uri(learner.profile_picture),
         }
         return JsonResponse(data, status=200)
     except Learner.DoesNotExist:
@@ -312,75 +303,104 @@ def learner_profile(request):
         return JsonResponse({'error': 'Learner not found'}, status=404)
         
 
+def learner_courses(request, learner_id):
+    try:
+        learner_courses = LearnerCourses.objects.filter(learner_id=learner_id)
+        data = [{
+            'learner_id': course.learner_id,
+            'learner_name': course.learner_name,
+            'course_id': course.course_id,
+            'course_name': course.course_name,
+            'educator_id': course.educator_id,
+            'educator_name': course.educator_name,
+            'course_description': course.course_description,
+            'course_duration': course.course_duration,
+            'course_domain': course.course_domain,
+            'course_thumbnail':course.course_thumbnail,
+            'course_video_id': course.course_video_id,
+            'course_video': course.course_video,
+            'course_exercise_id': course.course_exercise_id,
+            'course_purchase_status': course.course_purchase_status,
+            'course_exercise_url': course.course_exercise_url
+        } for course in learner_courses]
+        return JsonResponse({'success': True, 'data': data})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
 @csrf_exempt
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def learner_courses(request):
-    learner = request.user
+@api_view(['POST'])
+def enroll_course(request):
+    if request.method == 'POST':
+        data = request.data
+        learner_id = data.get('learner_id')
+        learner_name = data.get('learner_name')
+        course_id = data.get('course_id')
+        course_name = data.get('course_name')
+        educator_id = data.get('educator_id')
+        educator_name = data.get('educator_name')
+        course_description = data.get('course_description')
+        course_duration = data.get('course_duration')
+        course_domain = data.get('course_domain')
+        course_thumbnail = data.get('course_thumbnail')
+        course_video_id = data.get('course_video_id')
+        course_video = data.get('course_video')
+        course_exercise_id = data.get('course_exercise_id')
+        course_exercise_url = data.get('course_exercise_url')
+        course_purchase_status = data.get('course_purchase_status')
+        print(f'{learner_id}{course_id}{educator_id}')
 
-    purchased_courses = LearnerCourses.objects.filter(learner=learner)
 
-    courses_data = []
-    for course in purchased_courses:
-        course_data = {
-            'Course_ID': course.course_id,
-            'Course_Name': course.course_name,
-            'Course_Educator_Name': course.course_educator_name,
-            'Course_Thumbnail': course.course_thumbnail,
-            'Course_Description': course.course_description,
-            'Course_Duration': course.course_duration,
+        LearnerCourses.objects.create(
+            learner_id=learner_id,
+            learner_name=learner_name,
+            course_id=course_id,
+            course_name=course_name,
+            educator_id=educator_id,
+            educator_name=educator_name,
+            course_description=course_description,
+            course_duration=course_duration,
+            course_domain=course_domain,
+            course_thumbnail=course_thumbnail,
+            course_video_id=course_video_id,
+            course_video=course_video,
+            course_exercise_id=course_exercise_id,
+            course_exercise_url=course_exercise_url,
+            course_purchase_status=course_purchase_status
+        )
+
+        return JsonResponse({'message': 'Course enrollment successful'}, status=201)
+    else:
+        return JsonResponse({'error': 'Invalid request method. Only POST is allowed.'}, status=405)
+    
+@csrf_exempt
+def get_learner_name(request, learner_id):
+    try:
+        learner = Learner.objects.get(learner_id=learner_id)
+        learner_name = learner.name
+        return JsonResponse({'learner_name': learner_name}, status=200)
+    except Learner.DoesNotExist:
+        return JsonResponse({'error': 'Learner not found'}, status=404)
+    
+def get_course_details(request, course_id):
+    if request.method == 'GET':
+        course = get_object_or_404(ReleasedCourses, course_id=course_id)
+
+        course_details = {
+            'course_id': course.course_id,
+            'course_name': course.course_name,
+            'educator_id': course.educator_id,
+            'educator_name': course.educator_name,
+            'course_description': course.course_description,
+            'course_duration': course.course_duration,
+            'course_domain': course.course_domain,
+            'course_thumbnail_url': request.build_absolute_uri(course.course_thumbnail_url),
+            'course_video_url': request.build_absolute_uri(course.course_video_url),
+            'course_exercise_url': course.course_exercise_url,
+            'course_price': course.course_price
         }
 
-        course_data['videos'] = [
-            {
-                'Course_Video_ID': video.video_id,
-                'title': video.title,
-                'url': video.url,
-                'isWatched': video.is_watched
-            }
-            for video in course.coursevideos_set.all()
-        ]
-
-        course_data['exercises'] = [
-            {
-                'Course_Exercise_ID': exercise.exercise_id,
-                'title': exercise.title,
-                'description': exercise.description,
-                'isCompleted': exercise.is_completed
-            }
-            for exercise in course.courseexercises_set.all()
-        ]
-
-        courses_data.append(course_data)
-    return JsonResponse({'courses': courses_data})
-
-
-"""def upload_learner_profile_picture(request):
-    if request.method == 'POST' and request.FILES:
-        profile_picture_file = request.FILES.get('profile_picture')
-        
-        # Check if a file was uploaded
-        if profile_picture_file:
-            print('Profile picture received')
-            try:
-                # Get the learner object associated with the logged-in user
-                learner = Learner.objects.get(email=request.user.email)
-                
-                # Update the learner's profile picture field with the uploaded file
-                learner.profile_picture = profile_picture_file
-                learner.save()
-                
-                # Return a success response
-                return JsonResponse({'message': 'Profile picture uploaded successfully.'})
-            except Learner.DoesNotExist:
-                # Handle the case where the learner does not exist
-                return JsonResponse({'error': 'Learner not found.'}, status=404)
-            except Exception as e:
-                # Handle any other errors that may occur
-                return JsonResponse({'error': str(e)}, status=500)
-        else:
-            # No file was uploaded
-            return JsonResponse({'error': 'No file was uploaded.'}, status=400)
+        return JsonResponse(course_details)
     else:
-        # Invalid request method or no files were included in the request
-        return JsonResponse({'error': 'Invalid request.'}, status=400)"""
+        return JsonResponse({
+            'error': 'Invalid request method. Only GET is allowed.'
+        }, status=405)

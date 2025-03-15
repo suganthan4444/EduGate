@@ -14,6 +14,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-SECRET_KEY = 'tya3ipop^pkq)8te3u17!lf!0gs*&(^u0u16)gw%=m+m!djya$'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -33,7 +38,7 @@ X_FRAME_OPTIONS = 'ALLOW-FROM http://localhost:3000 http://127.0.0.1:8000'
 ALLOWED_HOSTS = ['localhost', 'localhost:3000','127.0.0.1']
 
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = [ "http://localhost:3000"] 
+CORS_ALLOWED_ORIGINS = [ "http://localhost:3000", 'http://127.0.0.1:3000', ] 
 CORS_ALLOW_METHODS = [
     'GET',
     'POST',
@@ -108,9 +113,9 @@ WSGI_APPLICATION = 'edugatedjangoproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'edugate',
-        'USER': '',
-        'PASSWORD': '',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -157,8 +162,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587  
 EMAIL_USE_TLS = True  
-EMAIL_HOST_USER = 'edugate.ed@gmail.com' 
-EMAIL_HOST_PASSWORD = '' 
+EMAIL_HOST_USER = env('EMAIL_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD') 
 
 
 import os

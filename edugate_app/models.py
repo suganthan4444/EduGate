@@ -67,7 +67,7 @@ class Learner(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=255, unique=True)
-    mobile_no = models.CharField(max_length=15, unique=True)
+    mobile_no = models.CharField(max_length=20)
     dob = models.DateField()
     highest_qualification = models.CharField(max_length=100)
     learner_id = models.BigIntegerField( unique=True, primary_key=True, verbose_name='ID')
@@ -102,13 +102,14 @@ class Educator(AbstractBaseUser, PermissionsMixin):
     dob = models.DateField(verbose_name='Date of Birth')
     highest_qualification = models.CharField(max_length=100, verbose_name='Highest Qualification')
     email = models.EmailField(unique=True, verbose_name='Email Address')
-    mobile_no = models.CharField(max_length=15, unique=True, verbose_name='Mobile Number')
+    mobile_no = models.CharField(max_length=20, verbose_name='Mobile Number')
     username = models.CharField(max_length=50, unique=True, verbose_name='Username')
     password = models.CharField(max_length=255, verbose_name='Password')
     bio = models.TextField(blank=True, verbose_name='Biography')
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name='Date Joined')
     is_active = models.BooleanField(default=True)
     last_login = models.DateTimeField(null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='educator_profile_pictures/', null=True, blank=True)
 
     groups = models.ManyToManyField(Group, related_name='educator_set', blank=True)
     user_permissions = models.ManyToManyField(Permission, related_name='educator_set', blank=True)
@@ -133,7 +134,7 @@ class Educator(AbstractBaseUser, PermissionsMixin):
 class EducatorCourses(models.Model):
     educator_name = models.CharField(max_length=255)
     educator_id = models.BigIntegerField(max_length=100)
-    course_id = models.BigIntegerField( unique=True)
+    course_id = models.BigIntegerField( unique=True, primary_key=True)
     course_name = models.CharField(max_length=100)
     course_description = models.TextField()
     course_duration = models.TextField()
@@ -145,6 +146,7 @@ class EducatorCourses(models.Model):
     course_exercise_url = models.TextField()
     course_price = models.TextField(null=True)
     course_release_status = models.BooleanField(default=False)
+    course_reject_status = models.BooleanField(default=False)
     course_rejection_reason = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -161,28 +163,27 @@ class EducatorCourses(models.Model):
 
 
 class LearnerCourses(models.Model):
-    learner_id = models.BigIntegerField(max_length=100)
+    learner_id = models.BigIntegerField(max_length=100, primary_key=True)
     learner_name = models.CharField(max_length=255)
     course_id = models.BigIntegerField(max_length=15)
     course_name = models.CharField(max_length=100)
     educator_id = models.BigIntegerField(max_length=100)
     educator_name = models.CharField(max_length=255)
     course_description = models.TextField()
-    course_duration = models.DurationField()
+    course_duration = models.TextField()
     course_domain = models.TextField(null=True)
-    course_thumbnail = models.ImageField(upload_to='course_thumbnails/', null=True, blank=True)
-    course_video_id = models.BigIntegerField(max_length=15)
+    course_thumbnail = models.URLField()
+    course_video_id = models.BigIntegerField(max_length=15, null=True)
     course_video = models.TextField() 
-    course_exercise_id = models.BigIntegerField(max_length=15)
-    course_exercise = models.TextField() 
-    course_completion_status = models.BooleanField(default=False)
-    course_certificate = models.FileField(upload_to='course_certificates/', null=True, blank=True)
+    course_exercise_id = models.BigIntegerField(max_length=15, null=True)
+    course_purchase_status = models.BooleanField(default=False)
+    course_exercise_url = models.TextField() 
 
     def __str__(self):
         return f"{self.learner_name} - {self.course_name}"
 
 class ReleasedCourses(models.Model):
-    course_id = models.BigIntegerField(unique=True)
+    course_id = models.BigIntegerField(unique=True, primary_key=True)
     course_name = models.CharField(max_length=100)
     educator_id = models.BigIntegerField()
     educator_name = models.CharField(max_length=255)

@@ -5,6 +5,9 @@ from . import learner_views, educator_views, admin_views, views
 
 urlpatterns = [
     path('api/get-released-courses/', views.get_released_courses, name='get_released_courses'),
+    path('api/course-preview/<int:course_id>/', views.course_preview, name='course_preview'),
+    path('api/educator-preview/<int:educator_id>/', views.educator_preview, name='educator_preview'),
+
 
     path('api/learner-send-otp/', learner_views.learner_send_otp, name='learner_send_otp'),
     path('api/learner-verify-otp/', learner_views.learner_verify_otp, name='learner_verify_otp'),
@@ -19,8 +22,10 @@ urlpatterns = [
     path('api/check-learner-username-availability/', learner_views.check_learner_username_availability, name='check_learner_username_availability'),
     path('api/check-learner-unique-fields/', learner_views.check_learner_unique_fields, name='learner_check_learner_unique_fields'),
     path('api/get-learner-csrf-token/', learner_views.get_learner_csrf_token, name='get_learner_csrf_token'),
+    path('api/get-learner-name/<int:learner_id>/', learner_views.get_learner_name, name='get_learner_name'),
+    path('api/enroll-course/', learner_views.enroll_course, name='enroll_course'),
+    path('api/get-course-details/<int:course_id>/', learner_views.get_course_details, name='get_course_details'),
 
-    #path('api/upload-learner-profile-picture/', learner_views.upload_learner_profile_picture, name='upload_learner_profile_picture'),
     path('api/educator-send-otp/', educator_views.educator_send_otp, name='educator_send_otp'),
     path('api/educator-verify-otp/', educator_views.educator_verify_otp, name='educator_verify_otp'),
     path('api/educator-signup/', educator_views.educator_signup, name='educator_signup'),
@@ -40,6 +45,8 @@ urlpatterns = [
     path('api/admin-login/', admin_views.admin_login, name='admin_login'),
     path('api/admin-courses/', admin_views.admin_courses, name='admin_courses'),
     path('api/release-course/<int:course_id>/', admin_views.release_course, name='release_course'),
+    path('api/get-learner-courses/', admin_views.get_learner_courses, name='get_learner_courses' ),
+    path('api/grant-course/<int:learner_id>/<int:course_id>/', admin_views.grant_course, name='grant_course' ),
 
     ]
 
