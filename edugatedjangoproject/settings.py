@@ -44,7 +44,7 @@ X_FRAME_OPTIONS = 'ALLOW-FROM http://localhost:3000 http://127.0.0.1:8000 https:
 
 
 
-ALLOWED_HOSTS = ['localhost', 'localhost:3000','127.0.0.1', 'https://suganthan4444.github.io', 'https://edu-gate.vercel.app', 'https://edu-gate-suganthans-projects-822936bb.vercel.app']
+ALLOWED_HOSTS = ['localhost', 'localhost:3000','127.0.0.1', 'https://suganthan4444.github.io', 'https://edu-gate.vercel.app', 'https://edu-gate-suganthans-projects-822936bb.vercel.app', '.vercel.app']
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [ "http://localhost:3000", 'http://127.0.0.1:3000', "https://suganthan4444.github.io", "https://edu-gate.vercel.app", "https://edu-gate-suganthans-projects-822936bb.vercel.app"] 
