@@ -35,10 +35,8 @@ import LearnerCoursePreview from './LearnerCoursePreview';
 
 function App() {
 
-  const basename = process.env.NODE_ENV === "production" ? "/EduGate" : "/";
-  
   return (
-    <Router basename={basename}>
+    <Router >
       <Helmet>
         <title>EduGate</title>
         <meta name="description" content="This is my React app" />
