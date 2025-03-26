@@ -250,6 +250,7 @@ def learner_login(request):
         
            if learner is not None:
                 login(request, learner, backend='edugate_djangoapp.backends.LearnerBackend')
+                print("Ok")
 
                 return JsonResponse({
                    "success": True,
