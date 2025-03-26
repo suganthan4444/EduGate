@@ -64,7 +64,7 @@ CORS_ALLOW_HEADERS = [
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_USE_SESSIONS= True
-CSRF_TRUSTED_ORIGINS=["http://localhost:3000", "https://suganthan4444.github.io", "https://edu-gate.vercel.app", "https://edu-gate-suganthans-projects-822936bb.vercel.app"]
+CSRF_TRUSTED_ORIGINS=["http://localhost:3000", "https://suganthan4444.github.io", "https://edu-gate.vercel.app", "https://edu-gate-suganthans-projects-822936bb.vercel.app", "https://edu-gate-django.vercel.app"]
 
 # Application definition
 
