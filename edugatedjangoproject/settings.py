@@ -17,10 +17,10 @@ import os
 import environ
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = environ.Env()
-print("Loading .env from:", os.path.join(BASE_DIR, ".env"))
-
-# Read .env file
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+env_file = os.path.join(BASE_DIR, ".env")
+if os.path.exists(env_file):
+    print("Loading .env from:", env_file)
+    environ.Env.read_env(env_file)
 
 # Print environment variables for debugging
 print("DB_NAME:", env("DB_NAME", default="Not Set"))
@@ -40,14 +40,13 @@ SECRET_KEY = env('KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-X_FRAME_OPTIONS = 'ALLOW-FROM http://localhost:3000 http://127.0.0.1:8000 https://suganthan4444.github.io https://edu-gate.vercel.app'
+X_FRAME_OPTIONS = 'ALLOW-FROM http://localhost:3000 http://127.0.0.1:8000 https://suganthan4444.github.io https://edu-gate.vercel.app https://edu-gate-suganthans-projects-822936bb.vercel.app'
 
-
-
-ALLOWED_HOSTS = ['localhost', 'localhost:3000','127.0.0.1', 'https://suganthan4444.github.io', 'https://edu-gate.vercel.app']
+ALLOWED_HOSTS = ['localhost', 'localhost:3000','127.0.0.1', 'https://suganthan4444.github.io', 'https://edu-gate.vercel.app', 'https://edu-gate-suganthans-projects-822936bb.vercel.app', '.vercel.app']
 
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = [ "http://localhost:3000", 'http://127.0.0.1:3000', "https://suganthan4444.github.io ", "https://edu-gate.vercel.app"] 
+CORS_ALLOWED_ORIGINS = [ "http://localhost:3000", 'http://127.0.0.1:3000', "https://suganthan4444.github.io", "https://edu-gate.vercel.app", "https://edu-gate-suganthans-projects-822936bb.vercel.app"] 
+
 CORS_ALLOW_METHODS = [
     'GET',
     'POST',
@@ -64,7 +63,9 @@ CORS_ALLOW_HEADERS = [
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_USE_SESSIONS= True
-CSRF_TRUSTED_ORIGINS=["http://localhost:3000", "https://suganthan4444.github.io/EduGate", "https://edu-gate.vercel.app"]
+
+CSRF_TRUSTED_ORIGINS=["http://localhost:3000", "https://suganthan4444.github.io", "https://edu-gate.vercel.app", "https://edu-gate-suganthans-projects-822936bb.vercel.app", "https://edu-gate-django.vercel.app"]
+
 
 # Application definition
 
