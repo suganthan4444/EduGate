@@ -17,10 +17,10 @@ import os
 import environ
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = environ.Env()
-print("Loading .env from:", os.path.join(BASE_DIR, ".env"))
-
-# Read .env file
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+env_file = os.path.join(BASE_DIR, ".env")
+if os.path.exists(env_file):
+    print("Loading .env from:", env_file)
+    environ.Env.read_env(env_file)
 
 # Print environment variables for debugging
 print("DB_NAME:", env("DB_NAME", default="Not Set"))
