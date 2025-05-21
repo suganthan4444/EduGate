@@ -31,9 +31,27 @@ import CourseInLook from './CourseInLook';
 import CoursePreview from './CoursePreview';
 import EducatorPreview from './EducatorPreview';
 import LearnerCoursePreview from './LearnerCoursePreview';
+import usePageTracking from './usePageTracking';
 
+
+const GA_TRACKING_ID = "G-TR87ELB30F";
+
+function usePageTracking() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (window.gtag) {
+      window.gtag('config', GA_TRACKING_ID, {
+        page_path: location.pathname,
+      });
+    }
+  }, [location]);
+}
+
+export default usePageTracking;
 
 function App() {
+  usePageTracking();
 
   return (
     <Router >
